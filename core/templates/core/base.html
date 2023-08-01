@@ -11,31 +11,28 @@
     </head>
 
     <body>
-        <div class="p-2">
-            <nav class="p-6 bg-rose-600 text-white flex justify-between items-center rounded-xl">
-                <a href="{% url 'core:index' %}" class="text-xl">Jatte</a>
+        <nav class="p-6 bg-emerald-800 text-white flex justify-between items-center">
+            <a href="{% url 'core:index' %}" class="text-xl">chat-@pplication</a>
+            <div class="flex items-end space-x-4">
+                <a href="{% url 'core:about' %}">About</a>
+                <a href="{% url 'account:login' %}">Login</a>
+            </div>
+        </nav>
 
-                <div class="flex items-center space-x-4">
-                    <a href="{% url 'core:index' %}">Home</a>
-                    <a href="{% url 'core:about' %}">About</a>
+        <main class="max-w-6xl mx-auto p-6">
+            {% if messages %}
+                <div class="message mb-6 p-6 bg-gray-800 text-white rounded-xl">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
                 </div>
-            </nav>
+            {% endif %}
 
-            <main class="max-w-6xl mx-auto p-6">
-                {% if messages %}
-                    <div class="message mb-6 p-6 bg-gray-800 text-white rounded-xl">
-                        {% for message in messages %}
-                            <p>{{ message }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+            {% block content %}
+            {% endblock %}
+        </main>
 
-                {% block content %}
-                {% endblock %}
-            </main>
-        </div>
-
-        <footer class="py-12 px-6 bg-gray-800 text-white text-center text-xs">
+        <footer class="py-12 px-6 bg-emerald-800 text-white text-center text-xs">
             <p>Copyright (c) 2023 - Jatte</p>
         </footer>
 
