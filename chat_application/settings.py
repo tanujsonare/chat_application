@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "account",
     "core",
+    "chat",
 ]
 
 AUTH_USER_MODEL = 'account.User'
@@ -131,3 +133,11 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# channel settings 
+
+CHANNEL_LAYER = {
+    "default":{
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    }
+}
