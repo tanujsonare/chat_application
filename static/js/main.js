@@ -7,8 +7,12 @@ const chatOpen = document.querySelector("#chat_open");
 const joinChat = document.querySelector("#join_chat");
 const chatWelcome = document.querySelector("#chat_welcome");
 const chatIcon = document.querySelector("#chat_icon");
-const chatNameElement = document.querySelector("#user_name")
+const chatNameElement = document.querySelector("#user_name");
 
+
+// Remove unused elements from localstorage
+
+localStorage.removeItem("chatroomuuid");
 
 // csrf token 
 
@@ -43,7 +47,7 @@ document.addEventListener('click', function(event) {
     }
 });
 
-function joinChatRoom(){
+async function joinChatRoom (){
     const data = new FormData();
     chatName = chatNameElement.value;
     if(chatName){
@@ -67,8 +71,9 @@ function joinChatRoom(){
         data: data,
     };
 
-    $.ajax(settings).done(function (response) {
+    await $.ajax(settings).done(function (response) {
         if (response && response.message == "Room created successfully"){
+            localStorage.setItem("chatroomuuid", chatRoomUuid);
             window.location.href = "/chat";
         }
     }).fail(function (errorThrown) {
