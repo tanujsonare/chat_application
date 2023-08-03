@@ -136,8 +136,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # channel settings 
 
-CHANNEL_LAYER = {
-    "default":{
-        "BACKEND": "channels.layers.InMemoryChannelLayer",
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
     }
 }
