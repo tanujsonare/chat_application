@@ -1,6 +1,10 @@
 import json
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
+from django.utils.timesince import timesince
+
+from .template_tages.chat_tags import initials
+
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -14,3 +18,36 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code):
         # Leave channel room or group
         self.channel_layer.group_discard(self.room_group_name, self.channel_name)
+
+    async def receive(self, text_data):
+        # Receives message from websocket front end
+        text_data_json = json.loads(text_data)
+        type = text_data_json['type']
+        message = text_data_json['message']
+        # agent = text_data_json['agent']
+        name = text_data_json['name']
+        # breakpoint()
+        if type == "message":
+            # send message to group room
+
+            await self.channel_layer.group_send(
+                self.room_group_name, {
+                    "type": "chat_message",
+                    "name":name,
+                    "message": message,
+                    # "agent": agent,
+                    "initials": initials(name),
+                    "created_at": "", #timesince(new_message.created_at)
+                }
+            )
+
+    async def chat_message(self, event):
+        # send message to websocket frontend
+        await self.send(text_data=json.dumps({
+            "type": event['type'],
+            "name": event['name'],
+            "message": event['message'],
+            # "agent": event['agent'],
+            "initials": event['initials'],
+            "created_at": event['created_at']
+        }))
