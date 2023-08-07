@@ -4,7 +4,7 @@ from account.models import User
 
 
 class Message(models.Model):
-    sender_user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE, related_name="sender_user")
+    sent_by = models.CharField(max_length=255, blank=True, null=True)
     receiver_user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE, related_name="receiver_user")
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
