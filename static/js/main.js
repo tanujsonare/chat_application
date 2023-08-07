@@ -13,6 +13,7 @@ const chatNameElement = document.querySelector("#user_name");
 // Remove unused elements from localstorage
 
 localStorage.removeItem("chatroomuuid");
+localStorage.removeItem("chatName");
 
 // csrf token 
 
@@ -74,6 +75,7 @@ async function joinChatRoom (){
     await $.ajax(settings).done(function (response) {
         if (response && response.message == "Room created successfully"){
             localStorage.setItem("chatroomuuid", chatRoomUuid);
+            localStorage.setItem("chatName", chatNameElement.value);
             window.location.href = "/chat";
         }
     }).fail(function (errorThrown) {
