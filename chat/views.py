@@ -13,7 +13,6 @@ def create_room(request, uuid):
     url = request.POST.get('url', '')
     try:
         Room.objects.create(uuid=uuid, client=name, url=url)
-        # return render(request, "chat/chat_page_for_customer.html")
         return JsonResponse({"message": "Room created successfully"})
     except :
         return JsonResponse({"error_message": "An error occured while creating room."})
@@ -21,6 +20,7 @@ def create_room(request, uuid):
 
 def chat(request):
     return render(request, "chat/chat_page_for_customer.html")
+
 
 @login_required
 def admin_dashboard(request):

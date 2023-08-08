@@ -10,17 +10,26 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/main.min.css' %}">
         <link href="https://unpkg.com/tailwindcss@1.9.6/dist/tailwind.min.css" rel="stylesheet">
     </head>
-
+    <style>
+        .content {
+            min-height: 500px;
+        }
+    </style>
     <body>
-        <nav class="p-6 bg-blue-900 text-white flex justify-between items-center">
+        <nav class="p-6 bg-blue-900 text-white flex justify-between items-center navbar">
             <a href="{% url 'core:index' %}" class="text-xl">chat-@pplication</a>
             <div class="flex items-end space-x-4">
-                <a href="{% url 'core:about' %}">About</a>
-                <a href="{% url 'account:login' %}">Login</a>
+                <a href="{% url 'core:about' %}" class="p-2">About</a>
+                {% if request.user.is_not_authenticated %}
+                    <a href="{% url 'account:login' %}" class="p-2">Login</a>
+                {% endif %}
+                {% if request.user.groups.all.first.name == "Manager" %}
+                    <a href="{% url 'chat:admin_dashboard' %}" class="inline-block p-2 px-6 bg-gray-300 text-black rounded-xl">Chat Admin</a>
+                {% endif %}
             </div>
         </nav>
 
-        <main class="max-w-6xl mx-auto p-6">
+        <main class="max-w-6xl mx-auto p-6 content">
             {% if messages %}
                 <div class="message mb-6 p-6 bg-gray-800 text-white rounded-xl">
                     {% for message in messages %}
@@ -33,7 +42,7 @@
             {% endblock %}
         </main>
 
-        <footer class="py-12 px-6 bg-blue-900 text-white text-center text-xs">
+        <footer class="py-12 px-6 bg-blue-900 text-white text-center text-xs footer">
             <p>Copyright (c) 2023 - Jatte</p>
         </footer>
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
