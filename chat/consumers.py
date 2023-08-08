@@ -4,6 +4,8 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from django.utils.timesince import timesince
 
 from .template_tages.chat_tags import initials
+from .models import Message, Room
+from account.models import User
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -12,6 +14,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_group_name = f'chat_{self.room_name}'
 
         # join channel room or room group
+        await self.get_room()
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
 
@@ -24,20 +27,20 @@ class ChatConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         type = text_data_json['type']
         message = text_data_json['message']
-        # agent = text_data_json['agent']
+        agent = text_data_json['agent']
         name = text_data_json['name']
-        # breakpoint()
-        if type == "message":
-            # send message to group room
 
+        if type == "message":
+            new_message = await self.create_message(name, message, agent)
+            # send message to group room
             await self.channel_layer.group_send(
                 self.room_group_name, {
                     "type": "chat_message",
                     "name":name,
                     "message": message,
-                    # "agent": agent,
+                    "agent": agent,
                     "initials": initials(name),
-                    "created_at": "", #timesince(new_message.created_at)
+                    "created_at": timesince(new_message.created_at)
                 }
             )
 
@@ -47,7 +50,21 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "type": event['type'],
             "name": event['name'],
             "message": event['message'],
-            # "agent": event['agent'],
+            "agent": event['agent'],
             "initials": event['initials'],
             "created_at": event['created_at']
         }))
+
+    @sync_to_async
+    def get_room(self):
+        self.room = Room.objects.get(uuid=self.room_name)
+
+    @sync_to_async
+    def create_message(self, sent_by, message, agent):
+        message = Message.objects.create(sent_by=sent_by, content=message)
+        if agent:
+            message.created_by = User.object.get(id=agent)
+            message.save()
+
+        self.room.messages.add(message)
+        return message
