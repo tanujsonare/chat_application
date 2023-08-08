@@ -5,7 +5,7 @@ from account.models import User
 
 class Message(models.Model):
     sent_by = models.CharField(max_length=255, blank=True, null=True)
-    receiver_user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE, related_name="receiver_user")
+    created_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE, related_name="receiver_user")
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -13,7 +13,7 @@ class Message(models.Model):
         ordering = ("created_at",)
 
     def __str__(self):
-        return f'{self.sender_user.name}'
+        return f'{self.content}'
 
 
 class Room(models.Model):
@@ -29,7 +29,7 @@ class Room(models.Model):
     uuid = models.CharField(max_length=255)
     client = models.CharField(max_length=255)
     agent = models.ForeignKey(User, null=True, blank=True, related_name="rooms", on_delete=models.CASCADE)
-    message = models.ManyToManyField(Message, blank=True)
+    messages = models.ManyToManyField(Message, blank=True)
     url = models.CharField(max_length=255, blank=True, null=True)
     status = models.CharField(max_length=20, choices=CHOICES_STATUS, default=WAITING)
     created_at = models.DateTimeField(auto_now_add=True)
