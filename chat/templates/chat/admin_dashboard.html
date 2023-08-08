@@ -2,13 +2,14 @@
 {% load static %}
 
 {% block content %}
-    <div >
+    <di >
         <h1 class="text-3xl text-center">Admin dashboard</h1>
         <div class="mt-8">
             <div class="flex justify-between">
-                <h2 class="text-xl py-2 mx-5">Users</h2>
-                <a href="#" class="inline-block py-2 px-6 bg-blue-600 text-white rounded-xl">Add new user</a>
+                <h2 class="text-xl py-2">Users</h2>
+                <a href="#" class="inline-block py-2 px-6 bg-blue-800 text-white rounded-xl">Add new user</a>
             </div>
+            <hr class="my-6 text-black">
             <div class="mt-4">
                 {% for user in staff_users %}
                 <div class="grid grid-cols-4 gap-4 py-2 {% cycle 'bg-gray-500' 'bg-gray-300' %}">
@@ -22,5 +23,24 @@
                 {% endfor %}
             </div>
         </div>
+        
+        <div class="mt-8">
+            <h1 class="text-xl mt-5">Rooms</h1>
+            <hr class="my-6">
+            <div class="grid grid-cols-4 gap-5">
+                {% for room in rooms %}
+                <div class="p-4 rounded-xl {% if room.status == 'waiting' %}card-waiting{% elif room.status == 'active' %}bg-yellow-200{% else %}bg-red-300{% endif %}">
+                    <h3 class="mb-4 text-lg">Chat</h3>
+                    <p>
+                        <b>ID: </b>{{room.uuid}} <br>
+                        <b>Name: </b>{{room.client}} <br>
+                        <b>Status: </b>{{room.status}} <br> 
+                        <b>Agent: </b>{% firstof room.agent.name 'None yet...' %} <br> 
+                    </p>
+                    <a href="#" class="mt-4 inline-block py-2 px-6 bg-emerald-800 text-white rounded-xl">Join chat</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>    
     </div>
 {% endblock content %}
