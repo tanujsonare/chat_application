@@ -2,7 +2,25 @@
 {% load static %}
 
 {% block content %}
-    <div>
-        <h2>Admin dashboard</h2>
+    <div >
+        <h1 class="text-3xl text-center">Admin dashboard</h1>
+        <div class="mt-8">
+            <div class="flex justify-between">
+                <h2 class="text-xl py-2 mx-5">Users</h2>
+                <a href="#" class="inline-block py-2 px-6 bg-blue-600 text-white rounded-xl">Add new user</a>
+            </div>
+            <div class="mt-4">
+                {% for user in staff_users %}
+                <div class="grid grid-cols-4 gap-4 py-2 {% cycle 'bg-gray-500' 'bg-gray-300' %}">
+                    <p class="px-2">{{user.name}}</p>
+                    <p class="px-2">{{user.email}}</p>
+                    <p class="px-2">{{user.get_role_display}}</p>
+                    <p class="px-2 text-right">
+                        <a href="" class="underline">Edit</a>
+                    </p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 {% endblock content %}
