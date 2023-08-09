@@ -1,0 +1,36 @@
+{% extends "core/base.html" %}
+
+{% load chat_tags %}
+
+{% block content %}
+    <div>
+        <h1 class="text-2xl border border-gray-800 rounded-xl max-w-[300px] p-3"><b class="mx-3">Room Id:</b> {{room.uuid}} </h1>
+        <hr class="mt-5 text-black">
+        <p class="mt-4 mx-5">
+            <b>Name: &nbsp;</b>{{room.client}}<br>
+            <b>Started: &nbsp;</b>{{room.created_at|timesince}}<br>
+            <b>Status: &nbsp;</b>{{room.status}}<br>
+            <b>Page Url: &nbsp;</b>{{room.url}}<br>
+            <b>Agent: &nbsp;</b>{% firstof room.agent.name "None yet...."%}<br>
+        </p>
+        <hr class="mt-6">
+        <div class="h-[300px] bg-gray-300 mt-5 overflow-scroll rounded-xl flex flex-col flex-grow">
+            {% for message in room.messages.all %}
+                <div class="flex w-full max-w-md mt-2 space-x-3 {% if message.created_by %}ml-auto justify-end{% endif %}">
+                    {% if not message.created_by %}
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-800 text-center text-white mx-3 my-2 pt-2">
+                            {{message.sent_by|initials}}
+                        </div>
+                    {% endif %}
+                    <div class="my-4">
+                        <div class="{% if message.created_by %}bg-blue-600{% else %}bg-gray-500{% endif %}">
+                            <p class="text-sm">{{message.content}}</p>
+                        </div>
+                        <span class="text-xs text-gray-700 leading-none">{{ message.created_at|timesince}} ago</span>
+                    </div>
+                </div>
+             {% comment %} {{message}} {% endcomment %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
