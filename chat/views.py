@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 
 from .models import Room
 from account.models import User
@@ -24,10 +25,25 @@ def chat(request):
 
 @login_required
 def admin_dashboard(request):
-    rooms = Room.objects.all()
-    staff_users = User.objects.filter(is_staff=True)
+    try:
+        if request.user.groups.first().name == "Manager": 
+            rooms = Room.objects.all()
+            staff_users = User.objects.filter(is_staff=True)
 
-    return render(request, "chat/admin_dashboard.html",{
-        "rooms": rooms,
-        "staff_users": staff_users
-    })
+            return render(request, "chat/admin_dashboard.html",{
+                "rooms": rooms,
+                "staff_users": staff_users
+            })
+    except:
+        raise PermissionDenied
+
+
+@login_required
+def get_room_details(request, uuid):
+    # try:
+    if request.user.groups.first().name == "Manager":
+        room = Room.objects.get(uuid=uuid)
+        # breakpoint()
+        return render(request, "chat/room_details.html", {"room": room})
+    # except:
+        # raise PermissionDenied
