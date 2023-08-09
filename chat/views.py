@@ -40,10 +40,13 @@ def admin_dashboard(request):
 
 @login_required
 def get_room_details(request, uuid):
-    # try:
-    if request.user.groups.first().name == "Manager":
-        room = Room.objects.get(uuid=uuid)
-        # breakpoint()
-        return render(request, "chat/room_details.html", {"room": room})
-    # except:
-        # raise PermissionDenied
+    try:
+        if request.user.groups.first().name == "Manager":
+            room = Room.objects.get(uuid=uuid)
+            if room.status == Room.WAITING:
+                room.status = Room.ACTIVE
+                room.agent = request.user
+                room.save()
+            return render(request, "chat/room_details.html", {"room": room})
+    except:
+        raise PermissionDenied
