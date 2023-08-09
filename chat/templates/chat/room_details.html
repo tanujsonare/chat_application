@@ -1,6 +1,7 @@
 {% extends "core/base.html" %}
 
 {% load chat_tags %}
+{% load static %}
 
 {% block content %}
     <div>
@@ -8,14 +9,14 @@
         <hr class="mt-5 text-black">
         <p class="mt-4 mx-5">
             <b>Name: &nbsp;</b>{{room.client}}<br>
-            <b>Started: &nbsp;</b>{{room.created_at|timesince}}<br>
+            <b>Started: &nbsp;</b>{{room.created_at|timesince}} ago<br>
             <b>Status: &nbsp;</b>{{room.status}}<br>
             <b>Page Url: &nbsp;</b>{{room.url}}<br>
             <b>Agent: &nbsp;</b>{% firstof room.agent.name "None yet...."%}<br>
         </p>
         <hr class="mt-6">
         <div class="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
-            <div class="h-[300px] bg-gray-400 mt-5 overflow-scroll rounded-xl flex flex-col flex-grow">
+            <div class="h-[300px] bg-gray-400 mt-5 overflow-scroll rounded-xl flex flex-col flex-grow message_box">
                 {% for message in room.messages.all %}
                     <div class="flex w-full max-w-md mt-2 space-x-3 {% if message.created_by %}ml-auto justify-end{% endif %}">
                         {% if not message.created_by %}
@@ -66,4 +67,13 @@
             {% endif %}
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    {% if room.status == "active" %}
+        {{room.uuid|json_script:"room_uuid"}}
+        {{request.user.name|json_script:"user_name"}}
+        {{request.user.id|json_script:"user_id"}}
+        <script src="{% static 'js/chat_admin.js' %}"></script>
+    {% endif %}
 {% endblock %}
