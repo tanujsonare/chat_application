@@ -3,7 +3,7 @@ from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.utils.timesince import timesince
 
-from .template_tages.chat_tags import initials
+from .templatetags.chat_tags import initials
 from .models import Message, Room
 from account.models import User
 
