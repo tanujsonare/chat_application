@@ -32,26 +32,27 @@ function sendMesage(){
             "agent": "",
         }))
         chatText.value = "";
+        messageBox.scrollTo(0, messageBox.scrollHeight);
     }
 }
 
 function onNewMessage(data){
    if(data.type == "chat_message" && data.message){
         messageBox.innerHTML += `
-        <div class="col-start-1 col-end-8 p-3 rounded-lg">
-            <div class="flex flex-row items-center">
-                <div
-                    class="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
-                    ${data.initials}
+        <div class="flex w-full max-w-md mt-2 space-x-3g">
+            <div
+                class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-500 text-center text-white mx-3 my-2 pt-2">
+                ${data.initials}
+            </div>
+            <div class="my-1">
+                <div class="p-3 rounded-xl bg-white">
+                    ${data.message}
                 </div>
-                <div class="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
-                    <div>
-                        ${data.message}
-                    </div>
-                </div>
+                <span class="text-xs text-gray-800 leading-none">${data.created_at} ago</span>
             </div>
         </div>
         `
+        messageBox.scrollTo(0, messageBox.scrollHeight);
    }
 }
 
