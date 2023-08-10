@@ -30,7 +30,7 @@
                 {% if request.user.is_not_authenticated %}
                     <a href="{% url 'account:login' %}" class="p-2">Login</a>
                 {% endif %}
-                {% if request.user.groups.all.first.name == "Manager" or request.user.groups.all.first.name == "agents"%}
+                {% if request.user.groups.all.first.name == "Manager" or request.user.groups.all.first.name == "agent"%}
                     <a href="{% url 'chat:admin_dashboard' %}" class="inline-block p-2 px-6 bg-gray-300 text-black rounded-xl">Chat Admin</a>
                 {% endif %}
             </div>
@@ -39,7 +39,7 @@
         <main class="max-w-6xl mx-auto p-6 content">
             {% if messages %}
                 <div id="backend_message">
-                    <div class="message mb-6 p-6 bg-rose-600 text-white rounded-xl flex justify-between">
+                    <div class="message mb-6 p-3 bg-rose-600 text-white rounded-xl flex justify-between">
                         {% for message in messages %}
                             <p>{{ message }}</p>
                         {% endfor %}

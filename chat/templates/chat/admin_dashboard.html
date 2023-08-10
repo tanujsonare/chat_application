@@ -8,7 +8,7 @@
             <div class="mt-8">
                 <div class="flex justify-between">
                     <h2 class="text-xl py-2">Users</h2>
-                    <a href="#" class="inline-block py-2 px-6 bg-blue-800 text-white rounded-xl">Add new user</a>
+                    <a href="{% url 'chat:add_new_admin_user' %}" class="inline-block py-2 px-6 bg-blue-800 text-white rounded-xl">Add new user</a>
                 </div>
                 <hr class="my-4">
                 <div class="mt-4">
@@ -25,7 +25,7 @@
                 </div>
             </div>
         {% else %}
-            <h1 class="text-3xl text-center">Agents dashboard</h1>
+            <h1 class="text-3xl text-center">Agent dashboard</h1>
         {% endif %}
         <div class="mt-8">
             <h1 class="text-xl mt-5">Rooms</h1>
