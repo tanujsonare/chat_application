@@ -6,6 +6,7 @@ const sendMessageButton = document.querySelector("#send_message");
 const messageBox = document.querySelector("#message_box");
 
 $(document).ready(function () {
+    messageBox.scrollTo(0, messageBox.scrollHeight);
     if (chatRoomUuid){
         chatWebSocket = new WebSocket(`ws://${window.location.host}/ws/${chatRoomUuid}/`)
         chatWebSocket.onopen = function(e){
@@ -60,3 +61,9 @@ sendMessageButton.addEventListener("click", function(e){
     e.preventDefault();
     sendMessage();
 });
+
+chatText.addEventListener("keyup", function(e){
+    if (e.keyCode == 13){
+        sendMessage();
+    }
+})
