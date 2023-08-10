@@ -5,7 +5,7 @@
 
 {% block content %}
     <div>
-        <h1 class="text-2xl border border-gray-800 rounded-xl max-w-[300px] p-3 bg-yellow-100"><b class="mx-3">Room Id:</b> {{room.uuid}} </h1>
+        <h1 class="text-2xl border border-gray-800 rounded-xl max-w-[300px] p-3 bg-gray-100"><b class="mx-3">Room Id:</b> {{room.uuid}} </h1>
         <hr class="mt-5 text-black">
         <p class="mt-4 mx-5 bg-gray-200">
             <b>Name: &nbsp;</b>{{room.client}}<br>
@@ -18,14 +18,18 @@
         <div class="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
             <div class="h-[300px] bg-gray-400 mt-5 overflow-scroll rounded-xl flex flex-col flex-grow" id="message_box">
                 {% for message in room.messages.all %}
-                    <div class="flex w-full max-w-md mt-2 space-x-3 {% if message.created_by %}ml-auto justify-end{% endif %}">
+                    <div class="flex w-full max-w-md mt-2 space-x-3 {% if message.created_by %}ml-auto justify-end mx-5 {% endif %}">
                         {% if not message.created_by %}
                             <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-600 text-center text-white mx-3 my-2 pt-2">
                                 {{message.sent_by|initials}}
                             </div>
+                        {% else %}
+                            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-600 text-center text-white mx-3 my-2 pt-2">
+                                {{message.created_by.name|initials}}
+                            </div>
                         {% endif %}
                         <div class="my-2">
-                            <div class="p-3 rounded-xl {% if message.created_by %}bg-blue-600{% else %}bg-white{% endif %}">
+                            <div class="p-3 rounded-xl {% if message.created_by %}bg-gray-500{% else %}bg-white{% endif %}">
                                 <p class="text-sm">{{message.content}}</p>
                             </div>
                             <span class="text-xs text-gray-800 leading-none">{{ message.created_at|timesince}} ago</span>

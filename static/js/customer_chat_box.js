@@ -23,7 +23,7 @@ $(document).ready(function () {
     }
 })
 
-function sendMesage(){
+function sendMessage(){
     if (chatWebSocket){
         chatWebSocket.send(JSON.stringify({
             "type": "message",
@@ -57,5 +57,6 @@ function onNewMessage(data){
 }
 
 sendMessageButton.addEventListener("click", function(e){
-    sendMesage();
+    e.preventDefault();
+    sendMessage();
 });

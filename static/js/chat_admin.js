@@ -23,30 +23,32 @@ $(document).ready(function () {
     }
 })
 
-function sendMesage(){
+function sendMessage() {
     if (chatWebSocket){
         chatWebSocket.send(JSON.stringify({
-            "type": "message",
-            "name": chatName,
-            "message": chatText.value,
-            "agent": "",
+            'type': 'message',
+            'message': chatText.value,
+            'name': document.querySelector('#user_name').textContent.replaceAll('"', ''),
+            'agent': document.querySelector('#user_id').textContent.replaceAll('"', ''),
         }))
-        chatText.value = "";
+
+        chatText.value = '';
+        messageBox.scrollTo(0, messageBox.scrollHeight);
     }
 }
 
 function onNewMessage(data){
-    if(data.type == "chat_message" && data.message && !data.agent){
+    if(data.type == "chat_message" && data.message){
         let new_message = '';
         new_message += `
-            <div class="flex w-full max-w-md mt-2 space-x-3 ${data.agent ? "ml-auto justify-end" : ""}">
+            <div class="flex w-full max-w-md mt-2 space-x-3 ${data.agent ? "ml-auto justify-end mx-5" : ""}">
                 <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-500 text-center text-white mx-3 my-2 pt-2">
                     ${data.initials}
                 </div>
             `
         new_message += `
                 <div class="my-2">
-                    <div class="p-3 rounded-xl ${data.agent ? "bg-gray-600": "bg-white"}">
+                    <div class="p-3 rounded-xl ${data.agent ? "bg-gray-500": "bg-white"}">
                         <p class="text-sm">${data.message}</p>
                     </div>
                     <span class="text-xs text-gray-700 leading-none">${data.created_at} ago</span>
@@ -57,3 +59,8 @@ function onNewMessage(data){
         messageBox.scrollTo(0, messageBox.scrollHeight);
     }
 }
+
+sendMessageButton.addEventListener("click", function(e){
+    e.preventDefault();
+    sendMessage();
+});
