@@ -4,6 +4,7 @@ from django.http.response import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.contrib import messages
 
 from .models import Room
 from account.models import User
@@ -34,6 +35,11 @@ def admin_dashboard(request):
                 "rooms": rooms,
                 "staff_users": staff_users
             })
+        elif request.user.groups.first().name == "agents":
+            rooms = Room.objects.all()
+            return render(request, "chat/admin_dashboard.html",{
+                "rooms": rooms
+            })
     except:
         raise PermissionDenied
 
@@ -41,12 +47,13 @@ def admin_dashboard(request):
 @login_required
 def get_room_details(request, uuid):
     try:
-        if request.user.groups.first().name == "Manager":
+        if request.user.groups.first().name == "Manager" or request.user.groups.first().name == "agents":
             room = Room.objects.get(uuid=uuid)
-            if room.status == Room.WAITING:
+            if request.user.groups.first().name == "agents" and room.status == Room.WAITING:
                 room.status = Room.ACTIVE
                 room.agent = request.user
                 room.save()
+                messages.info(request, f"{request.user.name} you are assigned as a agent for this chat room !!!!")
             return render(request, "chat/room_details.html", {"room": room})
     except:
         raise PermissionDenied
