@@ -1,13 +1,16 @@
 import json
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
+from django.contrib.auth.models import Group
 
 from .models import Room
 from account.models import User
+from account.forms import AddUserForm
+
 
 @require_POST
 def create_room(request, uuid):
@@ -35,7 +38,7 @@ def admin_dashboard(request):
                 "rooms": rooms,
                 "staff_users": staff_users
             })
-        elif request.user.groups.first().name == "agents":
+        elif request.user.groups.first().name == "agent":
             rooms = Room.objects.all()
             return render(request, "chat/admin_dashboard.html",{
                 "rooms": rooms
@@ -47,13 +50,40 @@ def admin_dashboard(request):
 @login_required
 def get_room_details(request, uuid):
     try:
-        if request.user.groups.first().name == "Manager" or request.user.groups.first().name == "agents":
-            room = Room.objects.get(uuid=uuid)
-            if request.user.groups.first().name == "agents" and room.status == Room.WAITING:
+        room = Room.objects.get(uuid=uuid)
+        if room.agent == request.user or request.user.groups.first().name == "Manager" or (request.user.groups.first().name == "agent" and not room.agent):
+            if request.user.groups.first().name == "agent" and room.status == Room.WAITING:
                 room.status = Room.ACTIVE
                 room.agent = request.user
                 room.save()
                 messages.info(request, f"{request.user.name} you are assigned as a agent for this chat room !!!!")
             return render(request, "chat/room_details.html", {"room": room})
+        return render(request, "chat/room_details.html")
     except:
-        raise PermissionDenied
+        return render(request, "chat/room_details.html")
+    
+
+def add_new_admin_user(request):
+    try:
+        if request.user.groups.first().name == "Manager":
+            if request.method == "POST":               
+                form = AddUserForm(request.POST)
+                if form.is_valid():
+                    user = form.save(commit=False)
+                    user.is_staff = True
+                    user.set_password(request.POST.get("password"))
+                    user.save()
+                    if user.role == User.MANAGER: 
+                        group = Group.objects.get(name='Manager')
+                        group.user_set.add(user)
+                    messages.success(request, "Requested user added successfully.")
+                    return redirect("/admin-dashboard")
+            else:
+                form = AddUserForm()
+            return render(request, "chat/add_new_admin_user.html", {"form": form})
+        else:
+            messages.error(request, "You don't have permission to add new users !!!!")
+            return redirect("/admin-dashboard")
+    except:
+        messages.error(request, "You don't have permission to add new users !!!!")
+        return redirect("/admin-dashboard")
