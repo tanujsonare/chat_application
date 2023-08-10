@@ -30,7 +30,7 @@
                 {% if request.user.is_not_authenticated %}
                     <a href="{% url 'account:login' %}" class="p-2">Login</a>
                 {% endif %}
-                {% if request.user.groups.all.first.name == "Manager" %}
+                {% if request.user.groups.all.first.name == "Manager" or request.user.groups.all.first.name == "agents"%}
                     <a href="{% url 'chat:admin_dashboard' %}" class="inline-block p-2 px-6 bg-gray-300 text-black rounded-xl">Chat Admin</a>
                 {% endif %}
             </div>
@@ -38,10 +38,13 @@
 
         <main class="max-w-6xl mx-auto p-6 content">
             {% if messages %}
-                <div class="message mb-6 p-6 bg-gray-800 text-white rounded-xl">
-                    {% for message in messages %}
-                        <p>{{ message }}</p>
-                    {% endfor %}
+                <div id="backend_message">
+                    <div class="message mb-6 p-6 bg-rose-600 text-white rounded-xl flex justify-between">
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                        <span aria-hidden="true" class="text-3xl text-white mx-5" role="button" id="remove_message">&times;</span>
+                    </div>
                 </div>
             {% endif %}
 
@@ -54,6 +57,11 @@
         </footer>
         <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
         <script src="/static/js/jquery-3.6.0.min.js"></script>
+        <script>
+            $('#remove_message').click(function(e){
+                $('#backend_message').remove();
+            })
+        </script>
         {% block scripts %}
         {% endblock %}
     </body>
