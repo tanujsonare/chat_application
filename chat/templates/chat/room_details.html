@@ -24,10 +24,6 @@
                             <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-600 text-center text-white mx-3 my-2 pt-2">
                                 {{message.sent_by|initials}}
                             </div>
-                        {% else %}
-                            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-600 text-center text-white mx-3 my-2 pt-2">
-                                {{message.created_by.name|initials}}
-                            </div>
                         {% endif %}
                         <div class="my-2">
                             <div class="p-3 rounded-xl {% if message.created_by %}bg-gray-500{% else %}bg-white{% endif %}">
@@ -35,10 +31,15 @@
                             </div>
                             <span class="text-xs text-gray-800 leading-none">{{ message.created_at|timesince}} ago</span>
                         </div>
+                        {% if message.created_by %}
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-600 text-center text-white mx-3 my-2 pt-2">
+                            {{message.created_by.name|initials}}
+                        </div>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>
-            {% if room.status == "active" %}
+            {% if room.status == "active" or request.user.groups.all.first.name == "Manager" %}
                 <div class="flex flex-row items-center h-16 rounded-xl bg-gray-500 w-full px-4">
                     <div class="flex-grow ml-4">
                         <div class="relative w-full">
@@ -80,7 +81,7 @@
 {% endblock %}
 
 {% block scripts %}
-    {% if room.status == "active" %}
+    {% if room.status == "active" or request.user.groups.all.first.name == "Manager" %}
         {{room.uuid|json_script:"room_uuid"}}
         {{request.user.name|json_script:"user_name"}}
         {{request.user.id|json_script:"user_id"}}

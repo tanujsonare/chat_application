@@ -43,10 +43,13 @@ function onNewMessage(data){
         let new_message = '';
         new_message += `
             <div class="flex w-full max-w-md mt-2 space-x-3 ${data.agent ? "ml-auto justify-end mx-5" : ""}">
-                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-500 text-center text-white mx-3 my-2 pt-2">
-                    ${data.initials}
-                </div>
-            `
+            `;
+        if (!data.agent){
+            new_message += `
+                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-600 text-center text-white mx-3 my-2 pt-2">
+                        ${data.initials}
+                    </div>`;
+        }
         new_message += `
                 <div class="my-2">
                     <div class="p-3 rounded-xl ${data.agent ? "bg-gray-500": "bg-white"}">
@@ -54,8 +57,16 @@ function onNewMessage(data){
                     </div>
                     <span class="text-xs text-gray-700 leading-none">${data.created_at} ago</span>
                 </div>
+                `;
+        if(data.agent){
+            new_message += `
+                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-600 text-center text-white mx-3 my-2 pt-2">
+                        ${data.initials}
+                    </div>`;
+        }
+        new_message +=`
             </div>
-        `
+        `;
         $("#message_box").append(new_message);
         messageBox.scrollTo(0, messageBox.scrollHeight);
     }
