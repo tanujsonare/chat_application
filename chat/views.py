@@ -127,3 +127,17 @@ def edit_staff_user(request, uuid):
     except:
         messages.error(request, "You don't have permission to add new users !!!!")
         return redirect("/admin-dashboard")
+    
+
+def delete_room(request, pk):
+    room = get_object_or_404(Room, pk=pk)
+    if room:
+        if room.agent == request.user or request.user.groups.first().name == "Manager":
+            room.delete()
+            messages.success(request, f'Requested chat room deleted successfully.')
+            return redirect("/admin-dashboard")
+        else:
+            messages.error(request, "You don't have permission to add new users !!!!")
+            return redirect("/admin-dashboard")
+    messages.error(request, "Room does not exist !!!!")
+    return redirect("/admin-dashboard")

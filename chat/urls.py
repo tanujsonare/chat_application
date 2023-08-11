@@ -12,4 +12,5 @@ urlpatterns = [
     path("admin-dashboard/add_user/", views.add_new_admin_user, name="add_new_admin_user"),
     path("admin-dashboard/user_details/<uuid:uuid>/", views.user_details, name="user_details"),
     path("admin-dashboard/edit_user_profile/<uuid:uuid>/", views.edit_staff_user, name="edit_staff_user_profile"),
+    path("admin-dashboard/delete_room/<int:pk>/", views.delete_room, name="delete_room"),
 ]
