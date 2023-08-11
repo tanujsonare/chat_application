@@ -1,5 +1,5 @@
 import json
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
@@ -76,6 +76,9 @@ def add_new_admin_user(request):
                     if user.role == User.MANAGER: 
                         group = Group.objects.get(name='Manager')
                         group.user_set.add(user)
+                    elif user.role == User.AGENT: 
+                        group = Group.objects.get(name='agent')
+                        group.user_set.add(user)
                     messages.success(request, "Requested user added successfully.")
                     return redirect("/admin-dashboard")
             else:
@@ -87,3 +90,17 @@ def add_new_admin_user(request):
     except:
         messages.error(request, "You don't have permission to add new users !!!!")
         return redirect("/admin-dashboard")
+    
+
+def user_details(request, uuid):
+    if request.user.groups.first().name == "Manager":
+        user = get_object_or_404(User, pk=uuid)
+        rooms = user.rooms.all()
+        return render(request, "chat/user_details.html",{
+            "user": user,
+            "rooms": rooms if rooms else None
+        })
+    else:
+        raise PermissionDenied
+    
+

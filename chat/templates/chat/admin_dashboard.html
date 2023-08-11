@@ -14,7 +14,7 @@
                 <div class="mt-4">
                     {% for user in staff_users %}
                     <div class="grid grid-cols-4 gap-4 py-2 {% cycle 'bg-gray-500' 'bg-gray-300' %}">
-                        <p class="px-2">{{user.name}}</p>
+                        <a href="{% url 'chat:user_details' user.pk %}" class="px-2 hover:underline hover:text-blue-700" role="button">{{user.name}}</a>
                         <p class="px-2">{{user.email}}</p>
                         <p class="px-2">{{user.get_role_display}}</p>
                         <p class="px-2 text-right">
@@ -27,24 +27,6 @@
         {% else %}
             <h1 class="text-3xl text-center">Agent dashboard</h1>
         {% endif %}
-        <div class="mt-8">
-            <h1 class="text-xl mt-5">Rooms</h1>
-            <hr class="my-4">
-            <div class="grid grid-cols-4 gap-5">
-                {% for room in rooms %}
-                <div class="p-4 rounded-xl {% if room.status == 'waiting' %}card-waiting{% elif room.status == 'active' %}bg-yellow-200{% else %}bg-red-300{% endif %}">
-                    <h3 class="mb-4 text-lg">Chat</h3>
-                    <p>
-                        <b>ID: </b>{{room.uuid}} <br>
-                        <b>Name: </b>{{room.client}} <br>
-                        <b>Started: </b>{{room.created_at|timesince}} ago<br>
-                        <b>Status: </b>{{room.status}} <br> 
-                        <b>Agent: </b>{% firstof room.agent.name 'None yet...' %} <br> 
-                    </p>
-                    <a href="{% url 'chat:room_details' room.uuid %}" class="mt-4 inline-block py-2 px-6 bg-blue-800 text-white rounded-xl">Join chat</a>
-                </div>
-                {% endfor %}
-            </div>
-        </div>    
+        {% include 'chat/rooms_list.html' %}   
     </div>
 {% endblock content %}
