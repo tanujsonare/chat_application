@@ -1,0 +1,25 @@
+<div class="mt-8">
+    <h1 class="text-xl mt-5">Rooms</h1>
+    <hr class="my-4">
+    {% if rooms %}
+    <div class="grid grid-cols-4 gap-5">
+        {% for room in rooms %}
+        <div class="p-4 rounded-xl {% if room.status == 'waiting' %}card-waiting{% elif room.status == 'active' %}bg-yellow-200{% else %}bg-red-300{% endif %}">
+            <h3 class="mb-4 text-lg">Chat</h3>
+            <p>
+                <b>ID: </b>{{room.uuid}} <br>
+                <b>Name: </b>{{room.client}} <br>
+                <b>Started: </b>{{room.created_at|timesince}} ago<br>
+                <b>Status: </b>{{room.status}} <br> 
+                <b>Agent: </b>{% firstof room.agent.name 'None yet...' %} <br> 
+            </p>
+            <a href="{% url 'chat:room_details' room.uuid %}" class="mt-4 inline-block py-2 px-6 bg-blue-800 text-white rounded-xl">Join chat</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <div class="mt-8">
+            <p class="text-center text-3xl mt-9">This agent didn't join any chat room yet</p>
+        </div>
+    {% endif %}
+</div> 

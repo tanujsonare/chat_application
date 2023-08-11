@@ -1,0 +1,10 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+
+<div>
+    <h1 class="text-2xl mb-5"><b>{% if user.role == "agent" %} Agent {% else %} Manager {% endif %} Name: </b> {{user.name}}</h1>
+    {% include "chat/rooms_list.html" %}
+</div>
+
+{% endblock  %}
