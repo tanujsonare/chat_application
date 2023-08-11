@@ -36,12 +36,12 @@ class EditUserForm(forms.ModelForm):
         fields = ('email', 'name', 'role',)
         widgets = {
             'email': forms.TextInput(attrs={
-                'class': 'w-full py-4 px-6 rounded-xl border'
+                'class': 'w-full py-4 my-3 px-6 rounded-xl border'
             }),
             'name': forms.TextInput(attrs={
-                'class': 'w-full py-4 px-6 rounded-xl border'
+                'class': 'w-full py-4 my-3 px-6 rounded-xl border'
             }),
             'role': forms.Select(attrs={
-                'class': 'w-full py-4 px-6 rounded-xl border'
+                'class': 'w-full py-4 my-3 px-6 rounded-xl border'
             })
         }
