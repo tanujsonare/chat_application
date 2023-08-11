@@ -18,7 +18,7 @@
                         <p class="px-2">{{user.email}}</p>
                         <p class="px-2">{{user.get_role_display}}</p>
                         <p class="px-2 text-right">
-                            <a href="" class="underline">Edit</a>
+                            <a href="{% url 'chat:edit_staff_user_profile' user.pk %}" class="underline" role="button" >Edit</a>
                         </p>
                     </div>
                     {% endfor %}

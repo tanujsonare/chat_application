@@ -9,7 +9,7 @@ from django.contrib.auth.models import Group
 
 from .models import Room
 from account.models import User
-from account.forms import AddUserForm
+from account.forms import AddUserForm, EditUserForm
 
 
 @require_POST
@@ -104,3 +104,26 @@ def user_details(request, uuid):
         raise PermissionDenied
     
 
+def edit_staff_user(request, uuid):
+    try:
+        if request.user.groups.first().name == "Manager":
+            user = get_object_or_404(User, pk=uuid)
+            if request.method == "POST":
+                form = EditUserForm(request.POST, instance=user)
+                
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, f"{user.name} user profile updated successfully.")
+                    return redirect("/admin-dashboard")
+            else:
+                form = EditUserForm(instance=user)
+            return render(request, "chat/edit_staff_user_profile.html",{
+                "form": form,
+                "user": user
+            })
+        else:
+            messages.error(request, "You don't have permission to add new users !!!!")
+            return redirect("/admin-dashboard")
+    except:
+        messages.error(request, "You don't have permission to add new users !!!!")
+        return redirect("/admin-dashboard")
