@@ -39,20 +39,34 @@ function sendMessage(){
 
 function onNewMessage(data){
    if(data.type == "chat_message" && data.message){
-        messageBox.innerHTML += `
-        <div class="flex w-full max-w-md mt-2 space-x-3g">
-            <div
-                class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-500 text-center text-white mx-3 my-2 pt-2">
-                ${data.initials}
-            </div>
-            <div class="my-1">
-                <div class="p-3 rounded-xl bg-white">
-                    ${data.message}
+        let new_message = '';
+        new_message += `
+            <div class="flex w-full max-w-md mt-2 space-x-3 ${!data.agent ? "ml-auto justify-end mx-5" : ""}">
+            `;
+        if (data.agent){
+            new_message += `
+                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-600 text-center text-white mx-3 my-2 pt-2">
+                        ${data.initials}
+                    </div>`;
+        }
+        new_message += `
+                <div class="my-2">
+                    <div class="p-3 rounded-xl ${data.agent ? "bg-white": "bg-gray-500"}">
+                        <p class="text-sm">${data.message}</p>
+                    </div>
+                    <span class="text-xs text-gray-700 leading-none">${data.created_at} ago</span>
                 </div>
-                <span class="text-xs text-gray-800 leading-none">${data.created_at} ago</span>
+                `;
+        if(!data.agent){
+            new_message += `
+                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-600 text-center text-white mx-3 my-2 pt-2">
+                        ${data.initials}
+                    </div>`;
+        }
+        new_message +=`
             </div>
-        </div>
-        `
+        `;
+        messageBox.innerHTML += new_message;
         messageBox.scrollTo(0, messageBox.scrollHeight);
    }
 }
