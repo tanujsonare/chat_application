@@ -26,7 +26,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
-                    "type": "user_update"
+                    "type": "user_update",
+                    "name": self.user.name,
                 }
             )
 
@@ -57,6 +58,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     "created_at": timesince(new_message.created_at)
                 }
             )
+        elif type == "update":
+            # send update to room
+            await self.channel_layer.group_send(
+                self.room_group_name, {
+                    "type":"writing_message",
+                    "message": message,
+                    "name": name,
+                    "agent": agent,
+                    "initials": initials(name),
+                }
+            )
 
     async def chat_message(self, event):
         # send message to websocket frontend
@@ -69,9 +81,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "created_at": event['created_at']
         }))
 
+    async def writing_message(self, event):
+        await self.send(text_data=json.dumps({
+            "type": event['type'],
+            "name": event['name'],
+            "message": event['message'],
+            "agent": event['agent'],
+            "initials": event['initials'],
+        }))
+
     async def user_update(self, event):
         await self.send(text_data=json.dumps({
-            "type": "staff_user_join"
+            "type": "staff_user_join",
+            "name": event['name'],
         }))
 
     @sync_to_async
