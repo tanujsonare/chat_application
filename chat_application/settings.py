@@ -46,7 +46,7 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'account.User'
 
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/admin-dashboard'
+LOGIN_REDIRECT_URL = '/home'
 LOGOUT_REDIRECT_URL = '/'
 
 MIDDLEWARE = [

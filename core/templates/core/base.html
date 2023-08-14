@@ -32,8 +32,11 @@
             <a href="{% url 'core:index' %}" class="text-xl">chat-@pplication</a>
             <div class="flex items-end space-x-4">
                 <a href="{% url 'core:about' %}" class="p-2">About</a>
-                {% if request.user.is_not_authenticated %}
+                {% if not request.user.is_authenticated %}
                     <a href="{% url 'account:login' %}" class="p-2">Login</a>
+                {% endif %}
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'account:logout' %}" class="p-2">Logout</a>
                 {% endif %}
                 {% if request.user.groups.all.first.name == "Manager" or request.user.groups.all.first.name == "agent"%}
                     <a href="{% url 'chat:admin_dashboard' %}" class="inline-block p-2 px-6 bg-gray-300 text-black rounded-xl">Chat Admin</a>
