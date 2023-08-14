@@ -4,6 +4,7 @@ const chatName = localStorage.getItem("chatName");
 const chatText = document.querySelector("#message_content");
 const sendMessageButton = document.querySelector("#send_message");
 const messageBox = document.querySelector("#message_box");
+const typingMessage = document.querySelector("#typing_message");
 
 $(document).ready(function () {
     messageBox.scrollTo(0, messageBox.scrollHeight);
@@ -39,6 +40,10 @@ function sendMessage(){
 
 function onNewMessage(data){
    if(data.type == "chat_message" && data.message){
+        let tmpInfo = document.querySelector(".tmp-info");
+        if (tmpInfo){
+            tmpInfo.remove();
+        }
         let new_message = '';
         new_message += `
             <div class="flex w-full max-w-md mt-2 space-x-3 ${!data.agent ? "ml-auto justify-end mx-5" : ""}">
@@ -51,7 +56,7 @@ function onNewMessage(data){
         }
         new_message += `
                 <div class="my-2">
-                    <div class="p-3 rounded-xl ${data.agent ? "bg-white": "bg-gray-500"}">
+                    <div class="p-3 rounded-xl ${data.agent ? "bg-gray-300": "bg-gray-500"}">
                         <p class="text-sm">${data.message}</p>
                     </div>
                     <span class="text-xs text-gray-700 leading-none">${data.created_at} ago</span>
@@ -68,8 +73,21 @@ function onNewMessage(data){
         `;
         messageBox.innerHTML += new_message;
         messageBox.scrollTo(0, messageBox.scrollHeight);
-   }else if(data.type == "staff_user_join"){
-    messageBox.innerHTML += `<p class="mt-2 text-center">The admin/agent has joined chat</p>`
+   } else if(data.type == "staff_user_join"){
+        messageBox.innerHTML += `<p class="mt-2 text-center">${data.name ? `User: ${data.name} (agent/admin)` : "Agent/admin" } has joined chat.</p>`
+   } else if(data.type == "writing_message"){
+        let tmpInfo = document.querySelector(".tmp-info");
+        if (tmpInfo){
+            tmpInfo.remove();
+        }
+        if(data.agent){
+            typingMessage.innerHTML += `
+                <div class="tmp-info flex w-full max-w-md mt-3 mx-5 space-x-3">
+                    <i class="text-blue-600">${data.message}</i>
+                    <img src="static/images/typing.gif" class="w-12 h-4 mt-2"></img>
+                </div>
+            `
+        }
    }
 }
 
