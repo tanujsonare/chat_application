@@ -68,6 +68,8 @@ function onNewMessage(data){
         `;
         messageBox.innerHTML += new_message;
         messageBox.scrollTo(0, messageBox.scrollHeight);
+   }else if(data.type == "staff_user_join"){
+    messageBox.innerHTML += `<p class="mt-2 text-center">The admin/agent has joined chat</p>`
    }
 }
 

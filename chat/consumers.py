@@ -12,15 +12,29 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = f'chat_{self.room_name}'
+        self.user = self.scope['user']
 
         # join channel room or room group
+        
         await self.get_room()
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
 
+        # Inform user on staff user join chat room
+        
+        if self.user.is_staff and self.room.status == Room.WAITING:
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    "type": "user_update"
+                }
+            )
+
     async def disconnect(self, close_code):
         # Leave channel room or group
         self.channel_layer.group_discard(self.room_group_name, self.channel_name)
+        if not self.user.is_staff:
+            await self.set_room_closed()
 
     async def receive(self, text_data):
         # Receives message from websocket front end
@@ -55,6 +69,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "created_at": event['created_at']
         }))
 
+    async def user_update(self, event):
+        await self.send(text_data=json.dumps({
+            "type": "staff_user_join"
+        }))
+
     @sync_to_async
     def get_room(self):
         self.room = Room.objects.get(uuid=self.room_name)
@@ -74,3 +93,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         self.room.messages.add(message)
         return message
+    
+    @sync_to_async
+    def set_room_closed(self):
+        self.room = Room.objects.get(uuid=self.room_name)
+        self.room.status = Room.CLOSED
+        self.room.save()
