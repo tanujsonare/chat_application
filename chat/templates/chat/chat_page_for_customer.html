@@ -3,8 +3,10 @@
 
 {% block content %}
 <!-- component -->
-<div class="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 h-full p-4">
-    <div class="h-[300px] bg-gray-400 mt-5 overflow-scroll rounded-xl flex flex-col flex-grow" id="message_box">
+<!-- <div class="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-500 h-full p-4" > -->
+    <div id="typing_message">
+    </div>
+    <div class="h-[300px] bg-gray-100 mt-3 overflow-scroll rounded-xl flex flex-col flex-grow" id="message_box">
 
         <!-- sender user  -->
         <!-- <div class="col-start-1 col-end-8 p-3 rounded-lg">
@@ -34,7 +36,7 @@
         </div> -->
 
     </div>
-    <div class="flex flex-row items-center h-16 rounded-xl bg-gray-500 w-full px-4">
+    <div class="flex flex-row items-center h-16 rounded-xl bg-gray-600 w-full px-4">
         <div class="flex-grow ml-4">
             <div class="relative w-full">
                 <input type="text" id="message_content"
@@ -64,7 +66,7 @@
             </button>
         </div>
     </div>
-</div>
+<!-- </div> -->
 
 {% endblock %}
 

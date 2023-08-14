@@ -4,6 +4,8 @@ var chatWebSocket;
 const chatText = document.querySelector("#message_content");
 const sendMessageButton = document.querySelector("#send_message");
 const messageBox = document.querySelector("#message_box");
+const userName = document.querySelector('#user_name').textContent.replaceAll('"', '')
+const userId = document.querySelector('#user_id').textContent.replaceAll('"', '')
 
 $(document).ready(function () {
     messageBox.scrollTo(0, messageBox.scrollHeight);
@@ -29,8 +31,8 @@ function sendMessage() {
         chatWebSocket.send(JSON.stringify({
             'type': 'message',
             'message': chatText.value,
-            'name': document.querySelector('#user_name').textContent.replaceAll('"', ''),
-            'agent': document.querySelector('#user_id').textContent.replaceAll('"', ''),
+            'name': userName,
+            'agent': userId
         }))
 
         chatText.value = '';
@@ -52,7 +54,7 @@ function onNewMessage(data){
         }
         new_message += `
                 <div class="my-2">
-                    <div class="p-3 rounded-xl ${data.agent ? "bg-gray-500": "bg-white"}">
+                    <div class="p-3 rounded-xl ${data.agent ? "bg-gray-500": "bg-gray-300"}">
                         <p class="text-sm">${data.message}</p>
                     </div>
                     <span class="text-xs text-gray-700 leading-none">${data.created_at} ago</span>
@@ -81,4 +83,13 @@ chatText.addEventListener("keyup", function(e){
     if (e.keyCode == 13){
         sendMessage();
     }
+})
+
+chatText.addEventListener("focus", function(e){
+    chatWebSocket.send(JSON.stringify({
+        'type': 'update',
+        'message': `${userName} (admin/agent) is typing`,
+        'name': document.querySelector('#user_name').textContent.replaceAll('"', ''),
+        'agent': document.querySelector('#user_id').textContent.replaceAll('"', ''), 
+    }))
 })
