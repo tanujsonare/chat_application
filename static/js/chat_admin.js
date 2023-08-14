@@ -6,6 +6,7 @@ const sendMessageButton = document.querySelector("#send_message");
 const messageBox = document.querySelector("#message_box");
 const userName = document.querySelector('#user_name').textContent.replaceAll('"', '')
 const userId = document.querySelector('#user_id').textContent.replaceAll('"', '')
+const typingMessage = document.querySelector("#typing_message");
 
 $(document).ready(function () {
     messageBox.scrollTo(0, messageBox.scrollHeight);
@@ -42,6 +43,10 @@ function sendMessage() {
 
 function onNewMessage(data){
     if(data.type == "chat_message" && data.message){
+        let tmpInfo = document.querySelector(".tmp-info");
+        if (tmpInfo){
+            tmpInfo.remove();
+        }
         let new_message = '';
         new_message += `
             <div class="flex w-full max-w-md mt-2 space-x-3 ${data.agent ? "ml-auto justify-end mx-5" : ""}">
@@ -71,7 +76,23 @@ function onNewMessage(data){
         `;
         $("#message_box").append(new_message);
         messageBox.scrollTo(0, messageBox.scrollHeight);
-    }
+    } else if(data.type == "writing_message"){
+        if(!data.agent){
+            let tmpInfo = document.querySelector(".tmp-info");
+            if (tmpInfo){
+                tmpInfo.remove();
+            }
+        }
+        if(!data.agent){
+            typingMessage.innerHTML += `
+                <div class="tmp-info flex w-full max-w-md mt-3 mx-3 space-x-3">
+                    <i class="text-blue-600">${data.message}</i>
+                    <img src="/static/images/typing.gif" class="w-12 h-4 mt-1"></img>
+                </div>
+            `
+        }
+   }
+
 }
 
 sendMessageButton.addEventListener("click", function(e){
@@ -85,11 +106,18 @@ chatText.addEventListener("keyup", function(e){
     }
 })
 
-chatText.addEventListener("focus", function(e){
-    chatWebSocket.send(JSON.stringify({
-        'type': 'update',
-        'message': `${userName} (admin/agent) is typing`,
-        'name': document.querySelector('#user_name').textContent.replaceAll('"', ''),
-        'agent': document.querySelector('#user_id').textContent.replaceAll('"', ''), 
-    }))
+chatText.addEventListener("change", function(e){
+    if(chatText.value != "" && chatText != null && chatText != undefined){
+        chatWebSocket.send(JSON.stringify({
+            'type': 'update',
+            'message': `${userName} (admin/agent) is typing`,
+            'name': document.querySelector('#user_name').textContent.replaceAll('"', ''),
+            'agent': document.querySelector('#user_id').textContent.replaceAll('"', ''), 
+        }))
+    }else{
+        let tmpInfo = document.querySelector(".tmp-info");
+        if (tmpInfo){
+            tmpInfo.remove();
+        }
+    }
 })

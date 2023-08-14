@@ -15,6 +15,8 @@
             <b>Page Url: &nbsp;</b>{{room.url}}<br>
             <b>Agent: &nbsp;</b>{% firstof room.agent.name "None yet...."%}<br>
         </p>
+        <div id="typing_message">
+        </div>
         <div class="h-[300px] bg-gray-100 mt-5 overflow-scroll rounded-xl flex flex-col flex-grow" id="message_box">
             {% for message in room.messages.all %}
                 <div class="flex w-full max-w-md mt-2 space-x-3 {% if message.created_by %}ml-auto justify-end mx-5 {% endif %}">

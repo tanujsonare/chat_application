@@ -76,9 +76,11 @@ function onNewMessage(data){
    } else if(data.type == "staff_user_join"){
         messageBox.innerHTML += `<p class="mt-2 text-center">${data.name ? `User: ${data.name} (agent/admin)` : "Agent/admin" } has joined chat.</p>`
    } else if(data.type == "writing_message"){
-        let tmpInfo = document.querySelector(".tmp-info");
-        if (tmpInfo){
-            tmpInfo.remove();
+        if(data.agent){
+            let tmpInfo = document.querySelector(".tmp-info");
+            if (tmpInfo){
+                tmpInfo.remove();
+            }
         }
         if(data.agent){
             typingMessage.innerHTML += `
@@ -99,5 +101,21 @@ sendMessageButton.addEventListener("click", function(e){
 chatText.addEventListener("keyup", function(e){
     if (e.keyCode == 13){
         sendMessage();
+    }
+})
+
+chatText.addEventListener("change", function(e){
+    if(chatText.value != "" && chatText != null && chatText != undefined){
+        chatWebSocket.send(JSON.stringify({
+            'type': 'update',
+            'message': `The client is typing `,
+            'name': chatName,
+            'agent': '', 
+        }))
+    }else{
+        let tmpInfo = document.querySelector(".tmp-info");
+        if (tmpInfo){
+            tmpInfo.remove();
+        }
     }
 })
