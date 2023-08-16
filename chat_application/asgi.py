@@ -13,10 +13,11 @@ from django.core.asgi import get_asgi_application
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
-
+import django
 from chat import routing
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "chat_application.settings_rail")
+django.setup()
 
 django_asgi_application = get_asgi_application()
 
