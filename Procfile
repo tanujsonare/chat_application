@@ -1,2 +1,2 @@
-web: daphne chat_application.asgi:application --port 80 --bind 0.0.0.0 -v2
+web: daphne chat_application.asgi:application --log-file -
 worker: python manage.py runworker -v2
