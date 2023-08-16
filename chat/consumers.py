@@ -21,8 +21,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
         # Inform user on staff user join chat room
-        
-        if self.user.is_staff and self.room.status == Room.WAITING:
+        if self.user.is_staff and (self.room.status == Room.WAITING or self.user.id == self.room.agent_id):
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
