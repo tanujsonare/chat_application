@@ -31,10 +31,12 @@ class CustomUserManager(UserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     AGENT = 'agent'
     MANAGER = 'manager'
+    CUSTOMER = 'customer'
 
     ROLES_CHOICES = (
         (AGENT, 'Agent'),
         (MANAGER, 'Manager'),
+        (CUSTOMER, 'Customer')
     )
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
