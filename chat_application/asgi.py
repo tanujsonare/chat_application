@@ -13,7 +13,7 @@ from django.conf import settings
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "chat_application.settings_rail")
 django.setup()
-settings.configure()
+# settings.configure()
 
 
 from django.core.asgi import get_asgi_application
