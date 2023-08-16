@@ -9,7 +9,7 @@ from django.contrib.auth.models import Group
 
 from .models import Room
 from account.models import User
-from account.forms import AddUserForm, EditUserForm
+from account.forms import AddAdminUserForm, EditUserForm
 
 
 @require_POST
@@ -67,7 +67,7 @@ def add_new_admin_user(request):
     try:
         if request.user.groups.first().name == "Manager":
             if request.method == "POST":               
-                form = AddUserForm(request.POST)
+                form = AddAdminUserForm(request.POST)
                 if form.is_valid():
                     user = form.save(commit=False)
                     user.is_staff = True
@@ -82,7 +82,7 @@ def add_new_admin_user(request):
                     messages.success(request, "Requested user added successfully.")
                     return redirect("/admin-dashboard")
             else:
-                form = AddUserForm()
+                form = AddAdminUserForm()
             return render(request, "chat/add_new_admin_user.html", {"form": form})
         else:
             messages.error(request, "You don't have permission to add new users !!!!")
