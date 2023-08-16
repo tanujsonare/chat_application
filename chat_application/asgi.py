@@ -28,10 +28,8 @@ django_asgi_application = get_asgi_application()
 application = ProtocolTypeRouter(
     {
         "http": django_asgi_application,
-        "websocket": AllowedHostsOriginValidator(
-            AuthMiddlewareStack(
+        "websocket": AuthMiddlewareStack(
                 URLRouter(routing.websocket_urlpatterns)
             )
-        )
     }
 )
