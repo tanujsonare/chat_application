@@ -1,2 +1,1 @@
-web: daphne chat_application.asgi:application
-worker: python manage.py runworker -v2
+web: daphne chat_application.asgi:application --bind 0.0.0.0
