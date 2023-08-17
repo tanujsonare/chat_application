@@ -15,4 +15,7 @@ DATABASES = {
         'PASSWORD': config('DATABASE_PASSWORD'),
         'OPTIONS': {'sslmode': 'require'},
     }
-} 
+}
+
+CSRF_HEADER_NAME = "HTTP_X_CSRFTOKEN"
+CSRF_COOKIE_SAMESITE = 'Lax'
