@@ -9,7 +9,7 @@ const typingMessage = document.querySelector("#typing_message");
 $(document).ready(function () {
     messageBox.scrollTo(0, messageBox.scrollHeight);
     if (chatRoomUuid){
-        chatWebSocket = new WebSocket(`ws://${window.location.host}/ws/${chatRoomUuid}/`)
+        chatWebSocket = new WebSocket(`wss://${window.location.host}/ws/${chatRoomUuid}/`)
         chatWebSocket.onopen = function(e){
             console.log("chat socket open");
         }

@@ -24,6 +24,11 @@
         </div>
         {% endfor %}
     </div>
+    {% endif %}
+    {% if not rooms and request.user.groups.all.first.name == "Manager" %}
+        <div class="mt-8">
+            <p class="text-center text-3xl mt-9">No chat room created yet.</p>
+        </div>
     {% else %}
         <div class="mt-8">
             <p class="text-center text-3xl mt-9">This agent didn't join any chat room yet</p>
