@@ -5,6 +5,8 @@ from decouple import config
 SECRET_KEY = config('SECRET_KEY')
 ALLOWED_HOSTS = ["chatapplication-production-e945.up.railway.app"]
 
+CSRF_TRUSTED_ORIGINS = ['chatapplication-production-e945.up.railway.app']
+
 DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -16,6 +18,3 @@ DATABASES = {
         'OPTIONS': {'sslmode': 'require'},
     }
 }
-
-CSRF_HEADER_NAME = "HTTP_X_CSRFTOKEN"
-CSRF_COOKIE_SAMESITE = 'Lax'
