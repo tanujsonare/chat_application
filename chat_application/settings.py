@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-%@l^ihlsu)xn8bagu@dmaatua+odxs19=6uy(l=@r)5m!i4ov@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "chatapplication-production-e945.up.railway.app"]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -127,7 +127,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATICFILES_DIRS = [BASE_DIR / 'core/static']
+STATIC_ROOT = BASE_DIR / 'static'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
