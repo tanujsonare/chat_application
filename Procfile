@@ -1,2 +1,1 @@
-web: daphne -b 0.0.0.0 chat_application.asgi:application
-worker: celery -A chat_application worker -l info
+web: daphne -b 0.0.0.0 -p $RAILWAY_PORT chat_application.asgi:application
