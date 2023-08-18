@@ -14,6 +14,8 @@ $(document).ready(function () {
             console.log("chat socket open");
         }
         chatWebSocket.onclose = function(e){
+            window.location.pathname = "/home";
+            alert("The current chat room is closed.")
             console.log("chat socket close");
         }
         if(chatWebSocket){
@@ -118,4 +120,9 @@ chatText.addEventListener("change", function(e){
             tmpInfo.remove();
         }
     }
+})
+
+addEventListener('load', function(e){
+    window.location.pathname = "/home";
+    alert("The current chat room is closed.")
 })
