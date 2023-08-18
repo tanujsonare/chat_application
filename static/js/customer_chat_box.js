@@ -121,8 +121,3 @@ chatText.addEventListener("change", function(e){
         }
     }
 })
-
-addEventListener('load', function(e){
-    window.location.pathname = "/home";
-    alert("The current chat room is closed.")
-})
