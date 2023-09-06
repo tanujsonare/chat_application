@@ -45,7 +45,7 @@ jobs:
       run: python --version
     - name: Run Python Command in AWS
       env:  
-        AWS_SSH_KEY: ${{ SSH_KEY }}
+        AWS_SSH_KEY: ${{ secrets.SSH_KEY }}
       run: |
         # Use the private key for SSH authentication
         echo "$AWS_SSH_KEY" > ~/.ssh/id_rsa
