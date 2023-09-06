@@ -52,5 +52,5 @@ jobs:
         echo "$AWS_PR_SSH_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         # Example: Run a Python script on an EC2 instance using SSH 
-        ssh-keyscan ubuntu@13.127.241.116 >> ~/.ssh/known_hosts
+        ssh-keyscan 13.127.241.116 >> ~/.ssh/known_hosts
         ssh -i ~/.ssh/id_rsa ubuntu@13.127.241.116 "python --version"
