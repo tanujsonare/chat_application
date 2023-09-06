@@ -43,3 +43,12 @@ jobs:
       uses: actions/setup-python@v3
     - name: testing the script
       run: python --version
+    - name: Run Python Command in AWS
+      env:  
+        AWS_SSH_KEY: ${{ SSH_KEY }}
+      run: |
+        # Use the private key for SSH authentication
+        echo "$AWS_SSH_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        # Example: Run a Python script on an EC2 instance using SSH 
+        ssh -i ~/.ssh/id_rsa ubuntu@ec2-13-127-241-116.ap-south-1.compute.amazonaws.com "python --version"
