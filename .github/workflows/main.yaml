@@ -28,6 +28,7 @@ jobs:
       run: |
         python manage.py makemigrations
         python manage.py migrate
+        pwd
     - name: Run Tests
       run: |
         python manage.py test
