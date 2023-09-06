@@ -33,4 +33,13 @@ jobs:
       run: |
         python manage.py test
       env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+
+  deploy:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+    - name: testing the script
+      uses: python --version
