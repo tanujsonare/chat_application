@@ -42,4 +42,4 @@ jobs:
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
     - name: testing the script
-      uses: python --version
+      run: python --version
