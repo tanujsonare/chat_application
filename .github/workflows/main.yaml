@@ -53,4 +53,4 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
         # Example: Run a Python script on an EC2 instance using SSH 
         ssh-keyscan ubuntu@ec2-13-127-241-116.ap-south-1.compute.amazonaws.com >> ~/.ssh/known_hosts
-        ssh -i ~/.ssh/id_rsa ubuntu@ec2-13-127-241-116.ap-south-1.compute.amazonaws.com "python --version"
+        ssh -i ~/.ssh/id_rsa ubuntu@13.127.241.116 "python --version"
