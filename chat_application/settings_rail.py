@@ -1,24 +1,7 @@
 from .settings import *
-from decouple import config
+from os import environ
 
 
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = environ.get('SECRET_KEY')
 
-ALLOWED_HOSTS = ["chatapplication-production-e945.up.railway.app", "localhost"]
-
-CORS_ALLOWED_ORIGINS = ["https://chatapplication-production-e945.up.railway.app",]
-
-CSRF_TRUSTED_ORIGINS = ['https://chatapplication-production-e945.up.railway.app',]
-
-
-DATABASES = {
-    "default": {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config('DATABASE_NAME'),
-        'USER': config('DATABASE_USER'),
-        'PORT': config('DATABASE_PORT'),
-        'HOST': config('DATABASE_HOST'),
-        'PASSWORD': config('DATABASE_PASSWORD'),
-        'OPTIONS': {'sslmode': 'require'},
-    }
-}
+ALLOWED_HOSTS = ["chatapplication-production-e945.up.railway.app", "localhost", "*"]
