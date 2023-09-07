@@ -27,12 +27,8 @@ jobs:
         python3.10 -m venv venv
         source venv/bin/activate
         pip install -r requirements.txt
-    - name: Apply Migrations
-      run: |
         python manage.py makemigrations
         python manage.py migrate
-    - name: Run Tests
-      run: |
         python manage.py test
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
