@@ -30,6 +30,7 @@ jobs:
         python manage.py makemigrations
         python manage.py migrate
         python manage.py test
+
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
     - name: Restart service
