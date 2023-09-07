@@ -11,7 +11,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.9]
+        python-version: ['3.10']
 
     steps:
     - uses: actions/checkout@v3
@@ -22,8 +22,9 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt-get install libpq-dev -y
-        python3 -m pip install --upgrade pip
-        python3 -m venv venv
+        python3.10 -m pip install --upgrade pip
+        sudo apt install python3.10-venv
+        python3.10 -m venv venv
         source venv/bin/activate
         pip install -r requirements.txt
     - name: Apply Migrations
