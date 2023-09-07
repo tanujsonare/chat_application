@@ -53,5 +53,5 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
         # Example: Run a Python script on an EC2 instance using SSH 
         ssh-keyscan 65.0.203.252 >> ~/.ssh/known_hosts
-        ssh -i ~/.ssh/id_rsa ubuntu@65.0.203.252 "cd /home/ubuntu/actions-runner/_work/chat_application/chat_application && export MYNAME='Mohit' && echo $MYNAME"
+        ssh -i ~/.ssh/id_rsa ubuntu@65.0.203.252 ". /home/ubuntu/actions-runner/setENV.sh"
 
