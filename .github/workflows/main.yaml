@@ -39,8 +39,8 @@ jobs:
       run: |
         whoami
         sudo systemctl daemon-reload
-        sudo systemctl enable daphne -v
-        sudo systemctl restart daphne -v
+        sudo systemctl enable daphne
+        sudo systemctl restart daphne
 
   # deploy:
   #   runs-on: self-hosted
