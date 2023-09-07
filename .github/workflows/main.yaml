@@ -23,35 +23,37 @@ jobs:
       run: |
         sudo apt-get install libpq-dev -y
         python -m pip install --upgrade pip
+        python -m venv venv
+        source venv/bin/activate
         pip install -r requirements.txt
     - name: Apply Migrations
       run: |
         python manage.py makemigrations
         python manage.py migrate
-        pwd
+        python manage.py runserver 0.0.0.0:8000
     - name: Run Tests
       run: |
         python manage.py test
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
-  deploy:
-    runs-on: self-hosted
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-    - name: testing the script
-      run: python --version
-    - name: Run Python Command in AWS
-      env:  
-        AWS_SSH_KEY: ${{ secrets.SSH_KEY }}
-      run: |
-        # Use the private key for SSH authentication
-        mkdir -p ~/.ssh
-        echo "$AWS_SSH_KEY" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        # Example: Run a Python script on an EC2 instance using SSH 
-        ssh-keyscan 65.0.203.252 >> ~/.ssh/known_hosts
-        ssh -i ~/.ssh/id_rsa ubuntu@65.0.203.252 "source /home/ubuntu/actions-runner/setENV.sh"
+  # deploy:
+  #   runs-on: self-hosted
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - name: Set up Python ${{ matrix.python-version }}
+  #     uses: actions/setup-python@v3
+  #   - name: testing the script
+  #     run: python --version
+  #   - name: Run Python Command in AWS
+  #     env:  
+  #       AWS_SSH_KEY: ${{ secrets.SSH_KEY }}
+  #     run: |
+  #       # Use the private key for SSH authentication
+  #       mkdir -p ~/.ssh
+  #       echo "$AWS_SSH_KEY" > ~/.ssh/id_rsa
+  #       chmod 600 ~/.ssh/id_rsa
+  #       # Example: Run a Python script on an EC2 instance using SSH 
+  #       ssh-keyscan 65.0.203.252 >> ~/.ssh/known_hosts
+  #       ssh -i ~/.ssh/id_rsa ubuntu@65.0.203.252 "source /home/ubuntu/actions-runner/setENV.sh"
 
