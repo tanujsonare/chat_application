@@ -22,8 +22,8 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt-get install libpq-dev -y
-        python -m pip install --upgrade pip
-        python -m venv venv
+        python3 -m pip install --upgrade pip
+        python3 -m venv venv
         source venv/bin/activate
         pip install -r requirements.txt
     - name: Apply Migrations
@@ -35,6 +35,11 @@ jobs:
         python manage.py test
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
+    - name: Restart service
+      run: |
+        sudo systemctl daemon-reload
+        sudo systemctl enable daphne
+        sudo systemctl restart daphne
 
   # deploy:
   #   runs-on: self-hosted
