@@ -36,13 +36,11 @@ jobs:
         python manage.py makemigrations
         python manage.py migrate
         python manage.py test
-        $SECRET_KEY >> .env
-        . .env
+        echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
 
     - name: Restart service
       run: |
         whoami
-        echo $SECRET_KEY
         sudo systemctl daemon-reload
         sudo systemctl enable daphne
         sudo systemctl restart daphne
