@@ -32,13 +32,14 @@ jobs:
         sudo apt-get install gcc -y
         python3.10 -m venv venv
         source venv/bin/activate
+        echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
         pip install -r requirements.txt
         python manage.py makemigrations
         python manage.py migrate
         python manage.py test
         cd $HOME && . active_env.sh
-        
-# echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+        souce .env
+# 
 
 #  && source .env
 
