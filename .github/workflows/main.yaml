@@ -36,6 +36,8 @@ jobs:
         python manage.py makemigrations
         python manage.py migrate
         python manage.py test
+        $SECRET_KEY >> .env
+        . .env
 
     - name: Restart service
       run: |
