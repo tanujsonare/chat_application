@@ -1,7 +1,7 @@
 from .settings import *
-from os import environ
+from decouple import config
 
 
-SECRET_KEY = environ.get("SECRET_KEY")
+SECRET_KEY = config('SECRET_KEY')
 
 ALLOWED_HOSTS = ["chatapplication-production-e945.up.railway.app", "localhost", "*"]
