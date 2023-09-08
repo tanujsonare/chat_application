@@ -41,6 +41,7 @@ jobs:
     - name: Restart service
       run: |
         whoami
+        source .env
         sudo systemctl daemon-reload
         sudo systemctl enable daphne
         sudo systemctl restart daphne
