@@ -30,16 +30,15 @@ jobs:
         sudo apt-get install build-essential -y
         sudo apt-get install libpq-dev -y
         sudo apt-get install gcc -y
-        python3.10 -m venv venv
-        source venv/bin/activate
         echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-        set -o allexport
-        source .env
-        set +o allexport
+        python3.10 -m venv venv
+        source venv/bin/activate && source .env
+
         pip install -r requirements.txt
         python manage.py makemigrations
         python manage.py migrate
         python manage.py test
+        cd $HOME && . active_env.sh
         sudo systemctl daemon-reload
         sudo systemctl enable daphne
         sudo systemctl restart daphne
