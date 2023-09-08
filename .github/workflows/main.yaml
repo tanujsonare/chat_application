@@ -38,10 +38,6 @@ jobs:
         python manage.py migrate
         python manage.py test
         cd $HOME && . active_env.sh
-        souce .env
-# 
-
-#  && source .env
 
 
   # deploy:
