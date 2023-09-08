@@ -32,16 +32,16 @@ jobs:
         sudo apt-get install gcc -y
         python3.10 -m venv venv
         source venv/bin/activate
+        echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+        source .env
         pip install -r requirements.txt
         python manage.py makemigrations
         python manage.py migrate
         python manage.py test
-        echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
 
     - name: Restart service
       run: |
         whoami
-        source .env
         sudo systemctl daemon-reload
         sudo systemctl enable daphne
         sudo systemctl restart daphne
