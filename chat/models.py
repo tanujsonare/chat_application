@@ -1,6 +1,7 @@
 from django.db import models
 
 from account.models import User
+from django.utils import timezone
 
 
 class Message(models.Model):
@@ -33,6 +34,7 @@ class Room(models.Model):
     url = models.CharField(max_length=255, blank=True, null=True)
     status = models.CharField(max_length=20, choices=CHOICES_STATUS, default=WAITING)
     created_at = models.DateTimeField(auto_now_add=True)
+    event_timezone = models.TimeZoneField(default=timezone.get_current_timezone())
 
     class Meta:
         ordering = ("-created_at",)
